@@ -1,5 +1,5 @@
 To install dependencies run command -
- pip install -r requirments.txt 
+ pip install -r requirements.txt 
 
 Run redis image on docker using command -
     docker run --name redis -p 6379:6379 -d redis
