@@ -1,5 +1,6 @@
 import time
 import requests
+from parse_handler.parser import parser_chain_of_responsibility
 from storage.storage import Storage
 from bs4 import BeautifulSoup
 
@@ -45,11 +46,11 @@ class ProductScraper:
         return products
 
     def parse_price(self, price_text):
-        price_text = price_text.strip("Starting at:").strip("₹")
-        if "₹" in price_text:
-            price_text = price_text.split("₹")[0]
-        price_text = float(price_text.replace("₹", "").replace(",", "").strip())
-        return price_text
+        price_text = parser_chain_of_responsibility.apply(price_text)
+        try:
+            return float(price_text)    
+        except ValueError:
+            return 0
 
     def store_products(self, products):
         for product in products:

@@ -1,5 +1,6 @@
 import uvicorn
-from fastapi import FastAPI, Depends, HTTPException, status,APIRouter
+from fastapi import FastAPI, Depends, HTTPException,status, APIRouter
+
 from logic.scraper import ProductScraper
 from storage import local_storage, redis
 from auth.token import verify_token
@@ -17,8 +18,6 @@ def scrape_catalogue(pages: int = 1, proxy: str = None):
         scraper = ProductScraper(pages_limit=pages, proxy=proxy,storage=local_storage_client,cache_storage= redis_storage_client)
         results = scraper.scrape()
         return {"message": f"Scraped {results['total_products']} products successfully."}
-    except HTTPException as e:
-        raise e
     except Exception as e:
         raise HTTPException(status_code=status.HTTP_500_INTERNAL_SERVER_ERROR, detail=str(e))
 
